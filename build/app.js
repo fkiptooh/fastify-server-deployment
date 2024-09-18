@@ -1,24 +1,16 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-async function routes(instance, opts, done) {
+const routes_1 = __importDefault(require("./routes"));
+async function app(instance, opts, done) {
     instance.get("/", async (req, res) => {
         res.status(200).send({
             hello: "World",
         });
     });
-    instance.register(async (instance, opts, done) => {
-        instance.get("/", async (req, res) => {
-            const { name = "" } = req.query;
-            res.status(200).send(`Hello ${name}`);
-        });
-        instance.get("/:name", async (req, res) => {
-            const { name = "" } = req.params;
-            res.status(200).send(`Hello ${name}`);
-        });
-        done();
-    }, {
-        prefix: "/hello",
-    });
+    instance.register(routes_1.default, { prefix: "/api/v1" });
     done();
 }
-exports.default = routes;
+exports.default = app;
